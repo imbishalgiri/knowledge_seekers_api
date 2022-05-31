@@ -1,10 +1,13 @@
 import Express, { Request, Response } from "express";
-import { getMessage } from "./server/index";
+import dotenv from "dotenv";
 
 const app = Express();
+dotenv.config();
+
+import "./config/database";
 
 app.get("/", (req: Request, res: Response) => {
-  res.send(getMessage());
+  res.send("this is a test route");
 });
 
 app.listen(5000, () => {
