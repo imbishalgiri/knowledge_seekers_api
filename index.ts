@@ -7,7 +7,10 @@ dotenv.config();
 import "./config/database";
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("new test");
+  res.send({
+    title: "success",
+    value: "jamie is a cool girl",
+  });
 });
 
 app.listen(process.env.PORT || 5000, () => {
