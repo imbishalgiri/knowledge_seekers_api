@@ -9,7 +9,7 @@ const app = (0, express_1.default)();
 dotenv_1.default.config();
 require("./config/database");
 app.get("/", (req, res) => {
-    res.send("this is a test route ok ok ok");
+    res.send("this is a test route ok ok ok what????");
 });
 app.listen(process.env.PORT || 5000, () => {
     console.log("listening on port 5000");
