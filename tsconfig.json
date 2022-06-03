@@ -5,7 +5,11 @@
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "app"
+    "outDir": "app",
+    "baseUrl": "./src"
   },
-  "lib": ["es2015"]
+  "lib": ["es2015"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json"
+  }
 }
