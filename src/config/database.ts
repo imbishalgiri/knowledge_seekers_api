@@ -3,5 +3,3 @@ import { connect } from "mongoose";
 connect(`${process.env.MONGO_DB}`)
   .then((con) => console.log("connection successful to the database"))
   .catch((err) => console.log("failed to connect to the database", err));
-
-export const name = "jamie";

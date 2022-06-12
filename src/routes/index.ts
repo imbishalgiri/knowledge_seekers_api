@@ -1,1 +1,3 @@
-export const route = "route";
+import UserRouter from "routes/user";
+
+export { UserRouter };
