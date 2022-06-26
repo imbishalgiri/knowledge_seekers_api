@@ -27,7 +27,7 @@ app.use("/api/v1/users", UserRouter);
 app.get("/", (req: Request, res: Response) => {
   res.send({
     title: "success",
-    value: "This is a homepage and a placeholder response",
+    value: "This is a homepage and a placeholder response (CD CHECK)",
   });
 });
 
