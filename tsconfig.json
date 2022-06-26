@@ -3,10 +3,19 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "target": "es6",
-    "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "app",
-    "baseUrl": "./src"
+
+    "baseUrl": "./",
+    "paths": {
+      "app/*": ["src/*"]
+    },
+    "plugins": [
+      {
+        "transform": "@zerollup/ts-transform-paths",
+        "exclude": ["*"]
+      }
+    ]
   },
   "lib": ["es2015"],
   "scripts": {

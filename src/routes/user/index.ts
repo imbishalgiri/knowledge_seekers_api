@@ -1,10 +1,10 @@
 import Express from "express";
-import appStorage from "config/multer";
+import appStorage from "app/config/multer";
 
 const UserRouter = Express.Router();
 
 // controllers import
-import { getAllUsers, addToUsers, addUsersFromExcel } from "controllers";
+import { getAllUsers, addToUsers, addUsersFromExcel } from "app/controllers";
 
 UserRouter.route("/").get(getAllUsers).post(addToUsers);
 

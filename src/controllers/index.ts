@@ -1,3 +1,7 @@
-import { getAllUsers, addToUsers, addUsersFromExcel } from "controllers/user";
+import {
+  getAllUsers,
+  addToUsers,
+  addUsersFromExcel,
+} from "app/controllers/user";
 
 export { getAllUsers, addToUsers, addUsersFromExcel };

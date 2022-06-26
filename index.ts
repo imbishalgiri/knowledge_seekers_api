@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 // imports for ----> (ROUTES)
-import { UserRouter } from "routes";
+import UserRouter from "app/routes/user";
 
 // express instantiation
 const app = Express();
@@ -16,9 +16,9 @@ app.use(Express.json());
 app.use(cors());
 
 // database configuration import
-import "config/database";
+import "app/config/database";
 
-import "config/multer";
+import "app/config/multer";
 
 // ---------> (ROUTES)
 app.use("/api/v1/users", UserRouter);

@@ -2,5 +2,5 @@
   "watch": ["."],
   "ext": ".ts,.js",
   "ignore": [],
-  "exec": "NODE_PATH=./src ts-node ./index.ts"
+  "exec": "ts-node -r tsconfig-paths/register ./index.ts"
 }

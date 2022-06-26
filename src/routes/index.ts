@@ -1,3 +1,3 @@
-import UserRouter from "routes/user";
+import UserRouter from "app/routes/user";
 
 export { UserRouter };

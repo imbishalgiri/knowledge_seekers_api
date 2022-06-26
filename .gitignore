@@ -2,3 +2,4 @@
 .vercel
 .env
 yarn.lock
+/app

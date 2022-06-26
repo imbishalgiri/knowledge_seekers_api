@@ -1,11 +1,14 @@
-import { validateError } from "utils/validator";
+import { validateError } from "app/utils/validator";
 import { Request, Response } from "express";
-import { User } from "models";
+import { User } from "app/models";
 import ExcelToJson from "convert-excel-to-json";
 import fs from "fs";
 
 export const getAllUsers = (req: Request, res: Response) => {
-  res.send("this is get all users api from controller");
+  res.send({
+    status: "success",
+    message: "This is get all users",
+  });
 };
 
 // this controller adds single user to the database
