@@ -2,10 +2,11 @@
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
+    "experimentalDecorators": true,
     "target": "es6",
     "sourceMap": true,
     "outDir": "app",
-
+    "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
       "app/*": ["src/*"]

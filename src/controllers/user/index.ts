@@ -4,14 +4,24 @@ import { User } from "app/models";
 import ExcelToJson from "convert-excel-to-json";
 import fs from "fs";
 
-export const getAllUsers = (req: Request, res: Response) => {
-  res.send({
-    status: "success",
-    message: "This is get all users",
-  });
+// 1) to get list of all users from database
+export const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find({}).select("-__v");
+    return res.status(200).send({
+      status: "success",
+      message: "Here are list of all users",
+      data: users,
+    });
+  } catch (error) {
+    res.send({
+      status: "failed",
+      error: error,
+    });
+  }
 };
 
-// this controller adds single user to the database
+// 2) this controller adds single user to the database
 export const addToUsers = async (req: Request, res: Response) => {
   try {
     // if user already exists do not add them to the database
@@ -24,12 +34,16 @@ export const addToUsers = async (req: Request, res: Response) => {
     // if not add them to the database
     const requestedUser = new User(req.body);
     const userAdded = await requestedUser.save();
-    res.send(userAdded);
+    res.status(200).send({
+      status: "success",
+      user: userAdded,
+    });
   } catch (err) {
     res.status(400).send(validateError(err));
   }
 };
 
+// 3)_ this accepts xlsx file with users to add into database
 export const addUsersFromExcel = async (req: Request, res: Response) => {
   const excelData = ExcelToJson({
     sourceFile: "public/" + req.file.filename,
