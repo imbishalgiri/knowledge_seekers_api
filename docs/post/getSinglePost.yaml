@@ -1,0 +1,33 @@
+paths:
+  /posts/{id}: # path of the user from your endpoint
+    get: # endpoint request type (put request)
+      tags:
+        - Post
+      summary: This endpoint is to get a post by ID
+      produces:
+        - application/json
+      parameters: # request parameters
+        - name: id # name of parameter passed
+          in: path # parameters in the path
+          description: provide post id
+          type: string
+          required: true
+      responses:
+        200:
+          description: Sample Get single post response
+          schema:
+            $ref: "#/definitions/updatePost"
+        401:
+          description: Unauthorized users
+definitions: # Schema definition for the request body
+  updatePost:
+    type: object
+    properties:
+      description:
+        type: string
+      image:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string

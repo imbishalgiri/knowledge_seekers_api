@@ -1,0 +1,35 @@
+paths:
+  /posts/{id}: # path of the user from your endpoint
+    put: # endpoint request type (put request)
+      tags:
+        - Post
+      summary: This endpoint is to update a post by id
+      produces:
+        - application/json
+      parameters: # request parameters
+        - name: id # name of parameter passed
+          in: path # parameters in the path
+          description: this is id of a post
+          required: true
+          type: string
+        - in: body
+          name: create post
+          description: request body
+          required: false
+          schema:
+            $ref: "#/definitions/updatePost"
+      responses:
+        200:
+          description: An object with a user updated user profile detail
+        401:
+          description: Unauthorized users
+definitions: # Schema definition for the request body
+  updatePost:
+    type: object
+    properties:
+      description:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string

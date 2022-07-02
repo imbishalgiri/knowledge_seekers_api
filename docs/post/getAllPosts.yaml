@@ -1,0 +1,34 @@
+paths:
+  /posts/: # path of the user from your endpoint
+    get: # endpoint request type (put request)
+      tags:
+        - Post
+      summary: This endpoint is to get all posts
+      produces:
+        - application/json
+      parameters: # request parameters
+        - name: description # name of parameter passed
+          in: path # parameters in the path
+          description: search by description query parameter
+          type: string
+      responses:
+        200:
+          description: Sample Get all post response
+          schema:
+            $ref: "#/definitions/getAllPost"
+        401:
+          description: Unauthorized users
+definitions: # Schema definition for the request body
+  getAllPost:
+    type: array
+    items:
+      type: object
+      properties:
+        description:
+          type: string
+        image:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string

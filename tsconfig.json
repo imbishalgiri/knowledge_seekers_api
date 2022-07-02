@@ -3,6 +3,7 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "target": "es6",
     "sourceMap": true,
     "outDir": "app",
