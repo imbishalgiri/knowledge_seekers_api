@@ -42,7 +42,7 @@ const swaggerDefinition = {
     description:
       "This is the REST API for our final year project Knowledge Seekers", // short description of the app
   },
-  host: "https://ks-api.vercel.app", // the host or url of the app
+  host: "ks-api.vercel.app", // the host or url of the app
   basePath: "/api/v1", // the basepath of your endpoint
 };
 

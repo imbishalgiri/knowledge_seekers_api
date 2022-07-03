@@ -9,8 +9,7 @@
     "start": " nodemon",
     "vercel:start": "vercel dev",
     "build": "tsc && tsc-alias",
-    "deploy": "vercel --prod",
-    "swagger-autogen": "node app/swagger.js"
+    "deploy": "vercel --prod"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
