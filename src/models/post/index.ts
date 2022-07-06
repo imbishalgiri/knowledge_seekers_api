@@ -14,7 +14,7 @@ const PostSchema = new Schema<IPosts>(
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "User is required"],
+      required: [true, "UserID is required"],
     },
     tags: {
       type: [

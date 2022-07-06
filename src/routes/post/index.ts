@@ -10,7 +10,7 @@ import {
   getAllPosts,
   getSinglePost,
   updateSinglePost,
-} from "app/controllers/post";
+} from "app/controllers/postController";
 
 PostRouter.route("/create").post(createPost);
 

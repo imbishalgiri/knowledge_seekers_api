@@ -1,7 +1,7 @@
 import { User } from "app/models";
 import { validateError } from "app/utils/validator";
 import { Response, Request } from "express";
-import Post from "app/models/posts";
+import Post from "app/models/post";
 import { IPosts } from "app/types/modelTypes";
 import { TypedRequestBody } from "app/types/typeUtils";
 

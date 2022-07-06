@@ -14,3 +14,16 @@ export interface IPosts {
   user: Types.ObjectId;
   tags: string[];
 }
+
+export interface ILikes {
+  post: Types.ObjectId;
+  user: Types.ObjectId;
+  likeType: string;
+}
+
+export interface IComment {
+  post: Types.ObjectId;
+  user: Types.ObjectId;
+  comment: string;
+  replies: string[];
+}

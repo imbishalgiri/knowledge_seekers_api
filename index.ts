@@ -7,6 +7,8 @@ import swaggerJSDoc from "swagger-jsdoc";
 // imports for ----> (ROUTES)
 import UserRouter from "app/routes/user";
 import PostRouter from "app/routes/post";
+import LikeRouter from "app/routes/like";
+
 // express instantiation
 const app = Express();
 
@@ -25,6 +27,7 @@ import "app/config/multer";
 // ---------> (ROUTES)
 app.use("/api/v1/users", UserRouter);
 app.use("/api/v1/posts", PostRouter);
+app.use("/api/v1/likes", LikeRouter);
 
 // base route AKA Homepage
 app.get("/", (req: Request, res: Response) => {

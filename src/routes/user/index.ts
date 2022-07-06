@@ -8,7 +8,7 @@ import {
   getAllUsers,
   addToUsers,
   addUsersFromExcel,
-} from "app/controllers/user";
+} from "app/controllers/userController";
 
 UserRouter.route("/").get(getAllUsers).post(addToUsers);
 
