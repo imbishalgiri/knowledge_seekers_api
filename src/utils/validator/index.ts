@@ -35,6 +35,8 @@ export const validateError = (err: Error) => {
     };
 
     return formattedErrorMessage;
+  } else {
+    return err;
   }
 
   // add other cases down below

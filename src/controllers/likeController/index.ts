@@ -14,6 +14,7 @@ const createLike = async (
     const { user: bodyUser } = req.body;
 
     // check if user can post to like or not
+    // if cannot post terminate right here
     const userId = bodyUser;
     const user = await User.findById(userId);
     if (!user) {
@@ -22,10 +23,24 @@ const createLike = async (
         message: "User not found to like a post",
       });
     }
+    // check whether that entry is already in database
+    const existingLike = await Like.find({
+      post: req.body.post,
+      user: req.body.user,
+    });
+    // if in database update the data and terminate
+    if (existingLike.length) {
+      const data = await Like.findOneAndUpdate(
+        { post: req.body.post, user: req.body.user },
+        { likeType: req.body.likeType }
+      );
+      return res.status(201).send({
+        status: "success",
+        message: data,
+      });
+    }
 
-    // const like = await Like.find({post: })
-
-    // create new like here
+    // create new like here and send acknowledge message to the user
     const requestedLike = new Like(req.body);
     const likeAdded = await (
       await requestedLike.save()
