@@ -13,6 +13,7 @@ export interface IPosts {
   image: string;
   user: Types.ObjectId;
   tags: string[];
+  title: string;
 }
 
 export interface ILikes {

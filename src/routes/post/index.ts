@@ -11,8 +11,9 @@ import {
   getSinglePost,
   updateSinglePost,
 } from "app/controllers/postController";
+import parser from "app/config/cloudinary";
 
-PostRouter.route("/create").post(createPost);
+PostRouter.route("/create").post(parser.single("image"), createPost);
 
 PostRouter.route("/").get(getAllPosts);
 

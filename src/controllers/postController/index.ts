@@ -1,9 +1,11 @@
 import { User } from "app/models";
 import { validateError } from "app/utils/validator";
-import { Response, Request } from "express";
+import { Response, Request } from "express"; 
 import Post from "app/models/post";
 import { IPosts } from "app/types/modelTypes";
 import { TypedRequestBody } from "app/types/typeUtils";
+import Like from "app/models/like";
+import Comment from "app/models/comment";
 
 // 1) controller to create post
 const createPost = async (
@@ -11,7 +13,8 @@ const createPost = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const { description, image, user: bodyUser } = req.body;
+    const { description, user: bodyUser } = req.body;
+    const image = req.file?.path;
     // base empty check
     if (!description && !image)
       return res.status(400).send({
@@ -28,7 +31,7 @@ const createPost = async (
       });
     }
     // create new post here
-    const requestedPost = new Post(req.body);
+    const requestedPost = new Post({ ...req.body, image });
     const postAdded = await (
       await requestedPost.save()
     ).populate("user", "-_id -__v");
@@ -70,9 +73,15 @@ const getSinglePost = async (
     const singlePost = await Post.findById(id)
       .select("-__v")
       .populate("user", "firstName lastName -_id");
+    const likes = await Like.find({ post: id })
+      .select("-__v")
+      .populate("user", "firstName lastName -_id");
+    const comments = await Comment.find({ post: id })
+      .select("-__v")
+      .populate("user", "firstName lastName -_id");
     return res.status(200).send({
       status: "success",
-      data: singlePost,
+      data: { post: singlePost, likes, comments },
     });
   } catch (err) {
     res.send({

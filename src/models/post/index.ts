@@ -16,6 +16,10 @@ const PostSchema = new Schema<IPosts>(
       ref: "User",
       required: [true, "UserID is required"],
     },
+    title: {
+      type: String,
+      trim: true,
+    },
     tags: {
       type: [
         {
