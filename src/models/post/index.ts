@@ -28,6 +28,22 @@ const PostSchema = new Schema<IPosts>(
       ],
       default: undefined,
     },
+    likes: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Like",
+        },
+      ],
+    },
+    comments: {
+      type: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Comment",
+        },
+      ],
+    },
   },
   { timestamps: true }
 );

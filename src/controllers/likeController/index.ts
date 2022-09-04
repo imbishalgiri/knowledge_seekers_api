@@ -1,3 +1,4 @@
+import Post from "app/models/post";
 import { User } from "app/models";
 import { Response, Request } from "express";
 import { ILikes } from "app/types/modelTypes";
@@ -45,6 +46,17 @@ const createLike = async (
     const likeAdded = await (
       await requestedLike.save()
     ).populate("user", "-_id -__v");
+    console.log("like added -->", likeAdded);
+
+    // updating the post
+    await Post.findByIdAndUpdate(
+      req.body.post,
+      {
+        $push: { likes: likeAdded._id },
+      },
+      { new: true, upsert: true }
+    );
+
     return res.status(201).send({
       status: "success",
       Like: likeAdded,

@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { IUser } from "app/types/modelTypes";
+import bcrypt from "bcrypt";
 
 const UserSchema = new Schema<IUser>(
   {
@@ -15,6 +16,8 @@ const UserSchema = new Schema<IUser>(
       trim: true,
     },
     faculty: { type: String, trim: true },
+    avatar: { type: String, trim: true },
+    role: { type: String, trim: true },
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -26,6 +29,22 @@ const UserSchema = new Schema<IUser>(
   },
   { timestamps: true }
 );
+
+// pre save hook to hash password
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+  return next();
+});
+
+// password verification mongoose model
+UserSchema.methods.isValidPassword = async function (
+  candidatePassword: string,
+  userPassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = model<IUser>("User", UserSchema);
 export default User;

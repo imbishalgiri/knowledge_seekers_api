@@ -1,6 +1,6 @@
 import { User } from "app/models";
 import { validateError } from "app/utils/validator";
-import { Response, Request } from "express"; 
+import { Response, Request } from "express";
 import Post from "app/models/post";
 import { IPosts } from "app/types/modelTypes";
 import { TypedRequestBody } from "app/types/typeUtils";
@@ -52,7 +52,37 @@ const getAllPosts = async (req: Request, res: Response): Promise<Response> => {
       description: new RegExp(`${search}`, "gi"),
     })
       .select("-__v -createdAt -updatedAt")
-      .populate("user", "firstName lastName -_id");
+      .populate("user", "firstName lastName -_id")
+      .populate({
+        path: "likes",
+        populate: {
+          path: "user",
+        },
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "user",
+        },
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "replies",
+          populate: {
+            path: "user",
+          },
+        },
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "likes",
+          populate: {
+            path: "user",
+          },
+        },
+      });
 
     return res.status(200).send({
       status: "success",
@@ -70,18 +100,40 @@ const getSinglePost = async (
 ): Promise<Response> => {
   const id = req.params.id;
   try {
-    const singlePost = await Post.findById(id)
-      .select("-__v")
-      .populate("user", "firstName lastName -_id");
+    let singlePost = await Post.findById(id)
+      .select("-__v -likes -comments")
+      .populate("user", "firstName lastName  ");
     const likes = await Like.find({ post: id })
       .select("-__v")
       .populate("user", "firstName lastName -_id");
+
     const comments = await Comment.find({ post: id })
       .select("-__v")
-      .populate("user", "firstName lastName -_id");
+      .populate("user", "firstName lastName -_id")
+      .populate({
+        path: "likes",
+        populate: {
+          path: "user",
+        },
+      })
+      .populate({
+        path: "replies",
+        populate: {
+          path: "user",
+        },
+      });
+    // final and formatted response
     return res.status(200).send({
       status: "success",
-      data: { post: singlePost, likes, comments },
+      data: {
+        _id: singlePost._id,
+        description: singlePost.description,
+        user: singlePost.user,
+        createdAt: singlePost.createdAt,
+        updatedAt: singlePost.updatedAt,
+        likes,
+        comments,
+      },
     });
   } catch (err) {
     res.send({

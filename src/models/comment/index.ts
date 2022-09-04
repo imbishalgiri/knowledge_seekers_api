@@ -18,10 +18,22 @@ const CommentSchema = new Schema<IComment>(
       type: String,
       required: [true, "Comment is Required"],
     },
+    likes: {
+      type: [
+        {
+          user: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+          },
+          likeType: String,
+        },
+      ],
+    },
     replies: {
       type: [
         {
-          type: String,
+          user: { type: Schema.Types.ObjectId, ref: "User" },
+          description: String,
         },
       ],
     },

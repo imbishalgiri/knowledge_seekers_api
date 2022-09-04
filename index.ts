@@ -3,11 +3,14 @@ import dotenv from "dotenv";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
+import passport from "passport";
 
 // imports for ----> (ROUTES)
 import UserRouter from "app/routes/user";
 import PostRouter from "app/routes/post";
 import LikeRouter from "app/routes/like";
+import CommentRouter from "app/routes/comment";
+import AuthRouter from "app/routes/auth";
 
 // express instantiation
 const app = Express();
@@ -19,15 +22,23 @@ dotenv.config();
 app.use(Express.json());
 app.use(cors());
 
+// passport js setup
+app.use(passport.initialize());
+import "app/config/passport";
+
 // database configuration import
 import "app/config/database";
 
 import "app/config/multer";
 
+// -------------------------------
+
 // ---------> (ROUTES)
 app.use("/api/v1/users", UserRouter);
 app.use("/api/v1/posts", PostRouter);
 app.use("/api/v1/likes", LikeRouter);
+app.use("/api/v1/comments", CommentRouter);
+app.use("/api/v1/auth", AuthRouter);
 
 // base route AKA Homepage
 app.get("/", (req: Request, res: Response) => {
