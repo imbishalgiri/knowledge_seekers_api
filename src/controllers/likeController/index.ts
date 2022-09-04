@@ -1,18 +1,18 @@
 import Post from "app/models/post";
 import { User } from "app/models";
 import { Response, Request } from "express";
-import { ILikes } from "app/types/modelTypes";
+import { ILikes, IUser } from "app/types/modelTypes";
 import Like from "app/models/like";
 import { validateError } from "app/utils/validator";
 import { TypedRequestBody } from "app/types/typeUtils";
 
+export interface ReqLike extends Request {
+  user: IUser;
+}
 // 1) controller to create post
-const createLike = async (
-  req: TypedRequestBody<ILikes>,
-  res: Response
-): Promise<Response> => {
+const createLike = async (req: ReqLike, res: Response): Promise<Response> => {
   try {
-    const { user: bodyUser } = req.body;
+    const bodyUser = req.user?._id;
 
     // check if user can post to like or not
     // if cannot post terminate right here
@@ -27,12 +27,12 @@ const createLike = async (
     // check whether that entry is already in database
     const existingLike = await Like.find({
       post: req.body.post,
-      user: req.body.user,
+      user: userId,
     });
     // if in database update the data and terminate
     if (existingLike.length) {
       const data = await Like.findOneAndUpdate(
-        { post: req.body.post, user: req.body.user },
+        { post: req.body.post, user: userId },
         { likeType: req.body.likeType }
       );
       return res.status(201).send({
@@ -42,12 +42,10 @@ const createLike = async (
     }
 
     // create new like here and send acknowledge message to the user
-    const requestedLike = new Like(req.body);
+    const requestedLike = new Like({ ...req.body, user: userId });
     const likeAdded = await (
       await requestedLike.save()
     ).populate("user", "-_id -__v");
-    console.log("like added -->", likeAdded);
-
     // updating the post
     await Post.findByIdAndUpdate(
       req.body.post,

@@ -1,19 +1,32 @@
+import { Types } from "mongoose";
 import { User } from "app/models";
 import { validateError } from "app/utils/validator";
 import { Response, Request } from "express";
 import Post from "app/models/post";
-import { IPosts } from "app/types/modelTypes";
+import { IPosts, IUser } from "app/types/modelTypes";
 import { TypedRequestBody } from "app/types/typeUtils";
 import Like from "app/models/like";
 import Comment from "app/models/comment";
 
+export interface ReqPostUser extends Request {
+  description: string;
+  image: string;
+  tags: string[];
+  title: string;
+  likes: Types.ObjectId[];
+  comments: Types.ObjectId[];
+  createdAt: string;
+  updatedAt: string;
+  user: IUser;
+}
 // 1) controller to create post
 const createPost = async (
-  req: TypedRequestBody<IPosts>,
+  req: ReqPostUser,
   res: Response
 ): Promise<Response> => {
   try {
-    const { description, user: bodyUser } = req.body;
+    const { description } = req.body;
+    const bodyUser = req.user._id;
     const image = req.file?.path;
     // base empty check
     if (!description && !image)
@@ -31,7 +44,7 @@ const createPost = async (
       });
     }
     // create new post here
-    const requestedPost = new Post({ ...req.body, image });
+    const requestedPost = new Post({ ...req.body, image, user: userId });
     const postAdded = await (
       await requestedPost.save()
     ).populate("user", "-_id -__v");

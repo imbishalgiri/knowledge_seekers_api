@@ -190,7 +190,6 @@ const likeComment = async (req: Ireply, res: Response): Promise<Response> => {
         data: likeData,
       });
     }
-
     const latestComment = await Comment.findByIdAndUpdate(
       req.body.comment,
       {

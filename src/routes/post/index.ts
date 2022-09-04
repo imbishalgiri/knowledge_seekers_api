@@ -2,7 +2,7 @@ import Express from "express";
 import appStorage from "app/config/multer";
 
 const PostRouter = Express.Router();
-
+import passport from "passport";
 // controllers import
 import {
   createPost,
@@ -13,7 +13,11 @@ import {
 } from "app/controllers/postController";
 import parser from "app/config/cloudinary";
 
-PostRouter.route("/create").post(parser.single("image"), createPost);
+PostRouter.route("/create").post(
+  passport.authenticate("jwt", { session: false }),
+  parser.single("image"),
+  createPost
+);
 
 PostRouter.route("/").get(getAllPosts);
 
