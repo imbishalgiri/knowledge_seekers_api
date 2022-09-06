@@ -9,7 +9,8 @@
     "start": " nodemon",
     "vercel:start": "vercel dev",
     "build": "tsc && tsc-alias",
-    "deploy": "vercel --prod"
+    "deploy": "vercel --prod",
+    "deploy-heroku": "git add . && git commit -m Heroku && git push heroku master"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -53,5 +54,8 @@
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.4.0",
     "uuid": "^8.3.2"
+  },
+  "engines": {
+    "node": "14.19.3"
   }
 }
