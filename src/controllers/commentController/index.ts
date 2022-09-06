@@ -140,7 +140,16 @@ const addReplyToTheComment = async (
         },
       },
       { new: true, upsert: true }
-    );
+    )
+      .populate({
+        path: "user",
+      })
+      .populate({
+        path: "replies",
+        populate: {
+          path: "user",
+        },
+      });
 
     if (!updatedComment)
       return res.status(403).send({

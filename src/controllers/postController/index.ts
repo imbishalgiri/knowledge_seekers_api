@@ -64,7 +64,7 @@ const getAllPosts = async (req: Request, res: Response): Promise<Response> => {
     const post = await Post.find({
       description: new RegExp(`${search}`, "gi"),
     })
-      .select("-__v -createdAt -updatedAt")
+      .select("-__v")
       .populate("user", "firstName lastName -_id")
       .populate({
         path: "likes",
@@ -118,11 +118,11 @@ const getSinglePost = async (
       .populate("user", "firstName lastName  ");
     const likes = await Like.find({ post: id })
       .select("-__v")
-      .populate("user", "firstName lastName -_id");
+      .populate("user", "firstName lastName");
 
     const comments = await Comment.find({ post: id })
       .select("-__v")
-      .populate("user", "firstName lastName -_id")
+      .populate("user", "firstName lastName")
       .populate({
         path: "likes",
         populate: {
@@ -142,6 +142,7 @@ const getSinglePost = async (
         _id: singlePost._id,
         description: singlePost.description,
         user: singlePost.user,
+        image: singlePost.image,
         createdAt: singlePost.createdAt,
         updatedAt: singlePost.updatedAt,
         likes,

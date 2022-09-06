@@ -4,6 +4,7 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 import passport from "passport";
+import { Server } from "socket.io";
 
 // imports for ----> (ROUTES)
 import UserRouter from "app/routes/user";
@@ -30,6 +31,7 @@ import "app/config/passport";
 import "app/config/database";
 
 import "app/config/multer";
+import { Types } from "mongoose";
 
 // -------------------------------
 
@@ -82,8 +84,82 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Launching the app
-app.listen(process.env.PORT || 5000, () => {
+const server = app.listen(process.env.PORT || 5000, () => {
   console.log("listening on port 5000");
 });
+// type definition for message model
+interface typeMessage {
+  sender: Types.ObjectId;
+  message: string;
+  chat: Types.ObjectId;
+}
 
 // https://ks-api.vercel.app/
+// types for socket io
+interface ServerToClientEvents {
+  noArg: () => void;
+  connected: (message: string) => void;
+  basicEmit: (a: number, b: string, c: Buffer) => void;
+  withAck: (d: string, callback: (e: number) => void) => void;
+  receiveComment: (comment: string) => void;
+  receiveReply: (comment: string) => void;
+}
+
+interface ClientToServerEvents {
+  addComment: (comment: string, room: string) => void;
+  addReply: (reply: string, room: string) => void;
+  joinPost: (id: string) => void;
+  newMessage: (message: typeMessage, room: string) => void;
+}
+
+interface InterServerEvents {
+  ping: () => void;
+}
+
+interface SocketData {
+  name: string;
+  age: number;
+  id: string;
+}
+
+// creating socket io server
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("connected to socket .io");
+
+  socket.on("joinPost", (id) => {
+    socket.join(id);
+  });
+
+  socket.on("addComment", (comment, room) => {
+    console.log("add comment", comment, room);
+    socket.to(room).emit("receiveComment", comment);
+  });
+
+  socket.on("addReply", (reply, room) => {
+    console.log("add reply", reply, room);
+    socket.to(room).emit("receiveReply", reply);
+  });
+
+  // socket.to("627a15248b49306a00f48a67").emit("connected", "hi there");
+  // socket.on("setup", (id) => {
+  //   socket.join(id);
+  //   console.log(id);
+  // });
+
+  // socket.on("newMessage", (message, room) => {
+  //   socket.broadcast.to(room).emit("receiveMessage", message);
+  // });
+});
