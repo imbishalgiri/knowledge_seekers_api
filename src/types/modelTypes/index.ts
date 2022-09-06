@@ -11,6 +11,9 @@ export interface IUser {
   confirmCode?: string;
   name: string;
   avatar?: string;
+  isBrandNew: boolean;
+  likedCategories: string[];
+  likedHashtags: string[];
   isValidPassword(
     candidatePassword: string,
     userPassword: string

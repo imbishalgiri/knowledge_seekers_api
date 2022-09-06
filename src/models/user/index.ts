@@ -10,21 +10,38 @@ const UserSchema = new Schema<IUser>(
       trim: true,
     },
     middleName: { type: String, trim: true },
+
+    isBrandNew: { type: Boolean, default: true },
+
     lastName: {
       type: String,
       required: [true, "Last Name is required."],
       trim: true,
     },
+
     faculty: { type: String, trim: true },
+
     avatar: { type: String, trim: true },
+
     role: { type: String, trim: true },
+
+    likedCategories: {
+      type: [{ type: String }],
+    },
+
+    likedHashtags: {
+      type: [{ type: String }],
+    },
+
     email: {
       type: String,
       required: [true, "Email is required"],
       trim: true,
       unique: true,
     },
+
     password: { type: String, trim: true },
+
     confirmCode: { type: String, trim: true },
   },
   { timestamps: true }

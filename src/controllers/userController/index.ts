@@ -1,3 +1,4 @@
+import { ReqPostUser } from "./../postController/index";
 import { validateError } from "app/utils/validator";
 import { Request, Response } from "express";
 import { User } from "app/models";
@@ -74,6 +75,29 @@ export const addUsersFromExcel = async (req: Request, res: Response) => {
       totalDataInserted: err.result.nInserted,
       insertedDatas: err.insertedDocs,
       fileError,
+    });
+  }
+};
+
+// 4) update single user -->
+
+export const updateSingleUser = async (req: ReqPostUser, res: Response) => {
+  const image = req.file?.path;
+  const user = req.user?._id;
+  const submitData = image ? { ...req.body, avatar: image } : req.body;
+
+  try {
+    const userUpdated = await User.findByIdAndUpdate(user, submitData);
+    if (userUpdated) {
+      return res.status(200).send({
+        status: "success",
+        user: userUpdated,
+      });
+    }
+  } catch (error) {
+    return res.status(400).send({
+      status: "failed",
+      error: error,
     });
   }
 };
