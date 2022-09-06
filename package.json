@@ -12,7 +12,6 @@
   "scripts": {
     "start": " nodemon",
     "vercel:start": "vercel dev",
-    "build": "tsc && tsc-alias",
     "deploy": "vercel --prod",
     "deploy-heroku": "git add . && git commit -m Heroku && git push heroku master"
   },
