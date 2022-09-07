@@ -188,14 +188,21 @@ const likeComment = async (req: Ireply, res: Response): Promise<Response> => {
       });
 
     const likes = commentData.likes;
-    const existingLike = likes.find((el: any) => el?.user == req.user?._id);
+    console.log(likes);
+    const existingLike = likes.find(
+      (el: any) => el?.user?.toString() == req.user?._id?.toString()
+    );
+    console.log("existing like -->", existingLike);
     if (existingLike) {
-      const newLikes = likes.filter((el: any) => el.user != req.user?._id);
+      const newLikes = likes.filter(
+        (el: any) => el.user?.toString() != req.user?._id?.toString()
+      );
+      console.log("new likes -->", newLikes);
       const likeData = await Comment.findByIdAndUpdate(req.body.comment, {
         likes: newLikes,
       });
       return res.status(200).send({
-        status: "success",
+        status: "successsss",
         data: likeData,
       });
     }
