@@ -141,6 +141,7 @@ const getSinglePost = async (
         description: singlePost.description,
         user: singlePost.user,
         image: singlePost.image,
+        title: singlePost.title,
         createdAt: singlePost.createdAt,
         updatedAt: singlePost.updatedAt,
         likes,
