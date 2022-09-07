@@ -101,3 +101,22 @@ export const updateSingleUser = async (req: ReqPostUser, res: Response) => {
     });
   }
 };
+
+// 5) To get single user
+export const getSingleUser = async (req: Request, res: Response) => {
+  const id = req.params.id;
+  try {
+    let singleUser = await User.findById(id).select("-__v -password");
+    if (singleUser) {
+      return res.status(200).send({
+        status: "success",
+        user: singleUser,
+      });
+    }
+  } catch (error) {
+    return res.status(400).send({
+      status: "failed",
+      error,
+    });
+  }
+};

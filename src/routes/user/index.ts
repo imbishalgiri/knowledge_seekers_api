@@ -9,11 +9,13 @@ const UserRouter = Express.Router();
 // controllers import
 import {
   getAllUsers,
+  getSingleUser,
   addToUsers,
   addUsersFromExcel,
 } from "app/controllers/userController";
 
 UserRouter.route("/").get(getAllUsers).post(addToUsers);
+UserRouter.route("/:id").get(getSingleUser);
 
 UserRouter.route("/upload-users").post(
   appStorage.single("users"),
