@@ -57,13 +57,25 @@ const createPost = async (
   }
 };
 
+interface reqParams {
+  description: string;
+  page: number;
+  limit: number;
+}
 // 2) controller to get all post
-const getAllPosts = async (req: Request, res: Response): Promise<Response> => {
+const getAllPosts = async (
+  req: Request<{}, {}, {}, reqParams>,
+  res: Response
+): Promise<Response> => {
   const search = req.query.description || "";
+  const page = req.query.page;
+  const limit = req.query.limit;
   try {
     const post = await Post.find({
       description: new RegExp(`${search}`, "gi"),
     })
+      .limit(limit)
+      .skip(limit * page)
       .select("-__v")
       .populate("user")
       .populate({
