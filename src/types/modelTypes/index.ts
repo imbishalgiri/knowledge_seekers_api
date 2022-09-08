@@ -13,6 +13,7 @@ export interface IUser {
   avatar?: string;
   isBrandNew: boolean;
   likedCategories: string[];
+  semester: string;
   likedHashtags: string[];
   isValidPassword(
     candidatePassword: string,

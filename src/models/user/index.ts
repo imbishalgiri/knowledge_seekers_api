@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { IUser } from "app/types/modelTypes";
 import bcrypt from "bcrypt";
+import { NextFunction } from "express";
 
 const UserSchema = new Schema<IUser>(
   {
@@ -20,6 +21,8 @@ const UserSchema = new Schema<IUser>(
     },
 
     faculty: { type: String, trim: true },
+
+    semester: { type: String, trim: true },
 
     avatar: { type: String, trim: true },
 
@@ -53,6 +56,27 @@ UserSchema.pre("save", async function (next) {
 
   this.password = await bcrypt.hash(this.password, 12);
   return next();
+});
+
+// pre save hook to hash password
+UserSchema.pre("insertMany", async function (next: NextFunction, docs: any) {
+  if (Array.isArray(docs) && docs.length) {
+    const hashedUsers = docs.map(async (user) => {
+      return await new Promise(async (resolve, reject) => {
+        let password = user.password.toString();
+        try {
+          user.password = await bcrypt.hash(password, 12);
+          resolve(user);
+        } catch (err) {
+          reject(err);
+        }
+      });
+    });
+    docs = await Promise.all(hashedUsers);
+    next();
+  } else {
+    return next(new Error("user should not be empty"));
+  }
 });
 
 // password verification mongoose model

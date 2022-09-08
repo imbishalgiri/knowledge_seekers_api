@@ -35,9 +35,30 @@ const loginController = async (
       });
     }
     // if all the tests get successful
-    const { _id, firstName, lastName, email, faculty, avatar, role } =
-      userFound;
-    const payload = { _id, firstName, lastName, email, faculty, avatar, role };
+    const {
+      _id,
+      firstName,
+      lastName,
+      email,
+      faculty,
+      avatar,
+      role,
+      isBrandNew,
+      likedCategories,
+      likedHashtags,
+    } = userFound;
+    const payload = {
+      _id,
+      firstName,
+      lastName,
+      email,
+      faculty,
+      avatar,
+      role,
+      isBrandNew,
+      likedHashtags,
+      likedCategories,
+    };
     const token = jwt.sign({ user: payload }, `${process.env.JWT_SECRET}`);
 
     return res.status(200).send({

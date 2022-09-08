@@ -1,4 +1,7 @@
-import { updateSingleUser } from "./../../controllers/userController/index";
+import {
+  deleteSingleUser,
+  updateSingleUser,
+} from "./../../controllers/userController/index";
 import parser from "app/config/cloudinary";
 import passport from "passport";
 import Express from "express";
@@ -15,7 +18,7 @@ import {
 } from "app/controllers/userController";
 
 UserRouter.route("/").get(getAllUsers).post(addToUsers);
-UserRouter.route("/:id").get(getSingleUser);
+UserRouter.route("/:id").get(getSingleUser).delete(deleteSingleUser);
 
 UserRouter.route("/upload-users").post(
   appStorage.single("users"),
