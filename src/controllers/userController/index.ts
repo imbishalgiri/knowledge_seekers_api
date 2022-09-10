@@ -81,24 +81,13 @@ export const addUsersFromExcel = async (req: Request, res: Response) => {
   let fileError = {};
   try {
     const users = await User.insertMany(newData, { ordered: false });
-    fs.unlink(
-      path.join(__dirname, "../../public/") + req.file.filename,
-      (err) => {
-        fileError = err;
-      }
-    );
+
     res.send({
       status: "bulk addition success",
       data: users,
       fileError,
     });
   } catch (err) {
-    fs.unlink(
-      path.join(__dirname, "../../public/") + req.file.filename,
-      (err) => {
-        fileError = err;
-      }
-    );
     return res.status(400).send({
       status: "error",
       totalDataInserted: err.result.nInserted,
