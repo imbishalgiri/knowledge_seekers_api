@@ -58,7 +58,7 @@ const createPost = async (
 };
 
 interface reqParams {
-  description: string;
+  title: string;
   page: number;
   limit: number;
 }
@@ -67,12 +67,14 @@ const getAllPosts = async (
   req: Request<{}, {}, {}, reqParams>,
   res: Response
 ): Promise<Response> => {
-  const search = req.query.description || "";
+  const search = req.query.title || "";
   const page = req.query.page;
   const limit = req.query.limit;
+
   try {
     const post = await Post.find({
-      description: new RegExp(`${search}`, "gi"),
+      title: new RegExp(`${search}`, "gi"),
+      // description: new RegExp(`${search}`, "gi"),
     })
       .limit(limit)
       .skip(limit * page)
