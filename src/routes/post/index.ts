@@ -8,6 +8,7 @@ import {
   createPost,
   deleteSinglePost,
   getAllPosts,
+  getAllPostsForMe,
   getSinglePost,
   updateSinglePost,
 } from "app/controllers/postController";
@@ -19,7 +20,15 @@ PostRouter.route("/create").post(
   createPost
 );
 
-PostRouter.route("/").get(getAllPosts);
+PostRouter.route("/").get(
+  passport.authenticate("jwt", { session: false }),
+  getAllPosts
+);
+
+PostRouter.route("/my").get(
+  passport.authenticate("jwt", { session: false }),
+  getAllPostsForMe
+);
 
 PostRouter.route("/:id")
   .get(getSinglePost)

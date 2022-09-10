@@ -20,6 +20,10 @@ const PostSchema = new Schema<IPosts>(
       type: String,
       trim: true,
     },
+    category: {
+      type: String,
+      trim: true,
+    },
     tags: {
       type: [
         {

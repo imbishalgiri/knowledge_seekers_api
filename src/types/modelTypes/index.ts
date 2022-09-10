@@ -27,6 +27,7 @@ export interface IPosts {
   user: Types.ObjectId;
   tags: string[];
   title: string;
+  category: string;
   likes: Types.ObjectId[];
   comments: Types.ObjectId[];
   createdAt: string;

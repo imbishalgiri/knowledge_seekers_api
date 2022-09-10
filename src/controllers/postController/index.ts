@@ -8,7 +8,25 @@ import { TypedRequestBody } from "app/types/typeUtils";
 import Like from "app/models/like";
 import Comment from "app/models/comment";
 
+// interface Iquery {
+//   limit: number;
+//   page: number;
+//   title: string;
+// }
+
 export interface ReqPostUser extends Request {
+  description: string;
+  image: string;
+  tags: string[];
+  title: string;
+  likes: Types.ObjectId[];
+  comments: Types.ObjectId[];
+  createdAt: string;
+  updatedAt: string;
+  user: IUser;
+}
+export interface newUserReq
+  extends Request<{}, {}, {}, { page: number; limit: number; title: string }> {
   description: string;
   image: string;
   tags: string[];
@@ -64,56 +82,138 @@ interface reqParams {
 }
 // 2) controller to get all post
 const getAllPosts = async (
-  req: Request<{}, {}, {}, reqParams>,
+  req: newUserReq,
   res: Response
 ): Promise<Response> => {
   const search = req.query.title || "";
   const page = req.query.page;
   const limit = req.query.limit;
+  const user = req.user?._id;
 
   try {
-    const post = await Post.find({
-      title: new RegExp(`${search}`, "gi"),
-      // description: new RegExp(`${search}`, "gi"),
-    })
-      .limit(limit)
-      .skip(limit * page)
-      .select("-__v")
-      .populate("user")
-      .populate({
-        path: "likes",
-        populate: {
-          path: "user",
-        },
+    const foundUser = await User.findById(user);
+    const userCategories = foundUser.likedCategories;
+    let recommendedPost: any = [];
+    if (!search) {
+      recommendedPost = await Post.find({
+        category: { $in: [...userCategories] },
       })
-      .populate({
-        path: "comments",
-        populate: {
-          path: "user",
-        },
-      })
-      .populate({
-        path: "comments",
-        populate: {
-          path: "replies",
-          populate: {
-            path: "user",
-          },
-        },
-      })
-      .populate({
-        path: "comments",
-        populate: {
+        .limit(limit)
+        .skip(limit * page)
+        .select("-__v")
+        .populate("user")
+        .populate({
           path: "likes",
           populate: {
             path: "user",
           },
-        },
-      });
+        })
+        .populate({
+          path: "comments",
+          populate: {
+            path: "user",
+          },
+        })
+        .populate({
+          path: "comments",
+          populate: {
+            path: "replies",
+            populate: {
+              path: "user",
+            },
+          },
+        })
+        .populate({
+          path: "comments",
+          populate: {
+            path: "likes",
+            populate: {
+              path: "user",
+            },
+          },
+        });
+    }
 
+    if (search) {
+      recommendedPost = await Post.find({
+        title: new RegExp(`${search}`, "gi"),
+      })
+        .limit(limit)
+        .skip(limit * page)
+        .select("-__v")
+        .populate("user")
+        .populate({
+          path: "likes",
+          populate: {
+            path: "user",
+          },
+        })
+        .populate({
+          path: "comments",
+          populate: {
+            path: "user",
+          },
+        })
+        .populate({
+          path: "comments",
+          populate: {
+            path: "replies",
+            populate: {
+              path: "user",
+            },
+          },
+        })
+        .populate({
+          path: "comments",
+          populate: {
+            path: "likes",
+            populate: {
+              path: "user",
+            },
+          },
+        });
+    }
+
+    if (!recommendedPost.length) {
+      recommendedPost = await Post.find({})
+        .limit(limit)
+        .skip(limit * page)
+        .select("-__v")
+        .populate("user")
+        .populate({
+          path: "likes",
+          populate: {
+            path: "user",
+          },
+        })
+        .populate({
+          path: "comments",
+          populate: {
+            path: "user",
+          },
+        })
+        .populate({
+          path: "comments",
+          populate: {
+            path: "replies",
+            populate: {
+              path: "user",
+            },
+          },
+        })
+        .populate({
+          path: "comments",
+          populate: {
+            path: "likes",
+            populate: {
+              path: "user",
+            },
+          },
+        });
+    }
     return res.status(200).send({
       status: "success",
-      data: post,
+      data: recommendedPost,
     });
   } catch (err) {
     res.status(400).send(validateError(err));
@@ -210,6 +310,23 @@ const deleteSinglePost = async (
     });
   }
 };
+//5) controller to delete a single post
+const getAllPostsForMe = async (req: newUserReq, res: Response) => {
+  const user = req.user._id;
+
+  try {
+    const posts = await Post.find({ user });
+    return res.status(200).send({
+      status: "success",
+      posts,
+    });
+  } catch (err) {
+    return res.send({
+      status: "failed",
+      error: err,
+    });
+  }
+};
 
 export {
   createPost,
@@ -217,4 +334,5 @@ export {
   getSinglePost,
   updateSinglePost,
   deleteSinglePost,
+  getAllPostsForMe,
 };

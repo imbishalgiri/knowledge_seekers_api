@@ -18,12 +18,27 @@ const createLike = async (req: ReqLike, res: Response): Promise<Response> => {
     // if cannot post terminate right here
     const userId = bodyUser;
     const user = await User.findById(userId);
+    const post = await Post.findById(req.body.post);
     if (!user) {
       return res.status(400).send({
         status: "failed",
         message: "User not found to like a post",
       });
     }
+
+    const categoriesUser = user.likedCategories;
+    const postCategory = post.category;
+    let newCategories = [];
+
+    if (req.body.likeType === "u") {
+      if (categoriesUser.indexOf(postCategory) === -1) {
+        newCategories = [...categoriesUser, postCategory];
+      }
+    } else {
+      console.log(postCategory, categoriesUser);
+      newCategories = categoriesUser.filter((el) => el != postCategory);
+    }
+    await User.findByIdAndUpdate(user, { likedCategories: newCategories });
     // check whether that entry is already in database
     const existingLike = await Like.find({
       post: req.body.post,
