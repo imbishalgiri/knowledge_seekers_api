@@ -15,6 +15,7 @@ export interface IUser {
   likedCategories: string[];
   semester: string;
   likedHashtags: string[];
+  pinnedPosts: Types.ObjectId[];
   isValidPassword(
     candidatePassword: string,
     userPassword: string
@@ -28,6 +29,15 @@ export interface IPosts {
   title: string;
   likes: Types.ObjectId[];
   comments: Types.ObjectId[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Inotice {
+  description: string;
+  image: string;
+  audience: string;
+  user: Types.ObjectId;
   createdAt: string;
   updatedAt: string;
 }

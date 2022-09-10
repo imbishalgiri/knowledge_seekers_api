@@ -46,6 +46,7 @@ const loginController = async (
       isBrandNew,
       likedCategories,
       likedHashtags,
+      semester,
     } = userFound;
     const payload = {
       _id,
@@ -53,6 +54,7 @@ const loginController = async (
       lastName,
       email,
       faculty,
+      semester,
       avatar,
       role,
       isBrandNew,

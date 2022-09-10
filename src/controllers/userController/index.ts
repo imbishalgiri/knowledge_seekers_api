@@ -138,7 +138,9 @@ export const updateSingleUser = async (req: ReqPostUser, res: Response) => {
 export const getSingleUser = async (req: Request, res: Response) => {
   const id = req.params.id;
   try {
-    let singleUser = await User.findById(id).select("-__v -password");
+    let singleUser = await (
+      await User.findById(id).select("-__v -password")
+    ).populate("pinnedPosts");
     if (singleUser) {
       return res.status(200).send({
         status: "success",

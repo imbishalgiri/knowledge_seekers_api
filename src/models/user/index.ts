@@ -36,6 +36,11 @@ const UserSchema = new Schema<IUser>(
       type: [{ type: String }],
     },
 
+    pinnedPosts: {
+      type: [{ type: Schema.Types.ObjectId }],
+      ref: "Post",
+    },
+
     email: {
       type: String,
       required: [true, "Email is required"],

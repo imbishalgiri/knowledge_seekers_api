@@ -32,6 +32,7 @@ import "app/config/database";
 
 import "app/config/multer";
 import { Types } from "mongoose";
+import NoticeRouter from "app/routes/notice";
 
 // -------------------------------
 
@@ -41,6 +42,7 @@ app.use("/api/v1/posts", PostRouter);
 app.use("/api/v1/likes", LikeRouter);
 app.use("/api/v1/comments", CommentRouter);
 app.use("/api/v1/auth", AuthRouter);
+app.use("/api/v1/notice", NoticeRouter);
 
 // base route AKA Homepage
 app.get("/", (req: Request, res: Response) => {
