@@ -25,7 +25,7 @@ PostRouter.route("/").get(
   getAllPosts
 );
 
-PostRouter.route("/my").get(
+PostRouter.route("/my/:id").get(
   passport.authenticate("jwt", { session: false }),
   getAllPostsForMe
 );

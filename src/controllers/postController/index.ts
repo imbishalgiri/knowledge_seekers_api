@@ -26,7 +26,12 @@ export interface ReqPostUser extends Request {
   user: IUser;
 }
 export interface newUserReq
-  extends Request<{}, {}, {}, { page: number; limit: number; title: string }> {
+  extends Request<
+    { id: string },
+    {},
+    {},
+    { page: number; limit: number; title: string }
+  > {
   description: string;
   image: string;
   tags: string[];
@@ -312,7 +317,7 @@ const deleteSinglePost = async (
 };
 //5) controller to delete a single post
 const getAllPostsForMe = async (req: newUserReq, res: Response) => {
-  const user = req.user._id;
+  const user = req.params.id;
 
   try {
     const posts = await Post.find({ user });
