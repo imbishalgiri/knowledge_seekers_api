@@ -7,6 +7,12 @@ import { IPosts, IUser } from "app/types/modelTypes";
 import { TypedRequestBody } from "app/types/typeUtils";
 import Like from "app/models/like";
 import Comment from "app/models/comment";
+import ContentBasedRecommender from "content-based-recommender";
+
+const recommender = new ContentBasedRecommender({
+  minScore: 0.1,
+  maxSimilarDocuments: 100,
+});
 
 // interface Iquery {
 //   limit: number;
@@ -99,6 +105,7 @@ const getAllPosts = async (
     const foundUser = await User.findById(user);
     const userCategories = foundUser.likedCategories;
     let recommendedPost: any = [];
+
     if (!search) {
       recommendedPost = await Post.find({
         category: { $in: [...userCategories] },
@@ -216,6 +223,8 @@ const getAllPosts = async (
           },
         });
     }
+    const recommendedByAi = recommender.train(recommendedPost);
+    const suggestedPost = recommendedByAi.getSimilarDocuments();
     return res.status(200).send({
       status: "success",
       data: recommendedPost,
