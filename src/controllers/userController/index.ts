@@ -162,3 +162,24 @@ export const deleteSingleUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const updatePasswordController = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  try {
+    const hashedPwd = await bcrypt.hash(password, 12);
+    const user = await User.findOneAndUpdate(
+      { email },
+      { password: hashedPwd }
+    );
+    return res.status(200).send({
+      status: "success",
+      message:
+        "password successfully changed, please login with your new password",
+    });
+  } catch (error) {
+    return res.status(400).send({
+      status: "failed",
+      error,
+    });
+  }
+};
