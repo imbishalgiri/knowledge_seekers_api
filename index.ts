@@ -33,6 +33,7 @@ import "app/config/database";
 import "app/config/multer";
 import { Types } from "mongoose";
 import NoticeRouter from "app/routes/notice";
+import UtilsRouter from "app/routes/utils";
 
 // -------------------------------
 
@@ -43,6 +44,7 @@ app.use("/api/v1/likes", LikeRouter);
 app.use("/api/v1/comments", CommentRouter);
 app.use("/api/v1/auth", AuthRouter);
 app.use("/api/v1/notice", NoticeRouter);
+app.use("/api/v1/utils", UtilsRouter);
 
 // base route AKA Homepage
 app.get("/", (req: Request, res: Response) => {
