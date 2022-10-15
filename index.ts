@@ -12,6 +12,7 @@ import PostRouter from "app/routes/post";
 import LikeRouter from "app/routes/like";
 import CommentRouter from "app/routes/comment";
 import AuthRouter from "app/routes/auth";
+import UserMessagesRouter from "app/routes/userMessages";
 
 // express instantiation
 const app = Express();
@@ -45,6 +46,8 @@ app.use("/api/v1/comments", CommentRouter);
 app.use("/api/v1/auth", AuthRouter);
 app.use("/api/v1/notice", NoticeRouter);
 app.use("/api/v1/utils", UtilsRouter);
+// this one is for random use case
+app.use("/api/v1/user-message", UserMessagesRouter);
 
 // base route AKA Homepage
 app.get("/", (req: Request, res: Response) => {

@@ -62,3 +62,11 @@ export interface IComment {
   likes: Types.ObjectId[];
   replies: { user: Types.ObjectId; description: string }[];
 }
+
+export interface IMessages {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  subject: string;
+  message: string;
+}
