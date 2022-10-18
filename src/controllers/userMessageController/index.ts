@@ -29,6 +29,7 @@ const createMessage = async (
 interface reqParams {
   page: number;
   limit: number;
+  type: string;
 }
 
 const getAllMessages = async (
@@ -37,11 +38,14 @@ const getAllMessages = async (
 ) => {
   const page = req.query.page;
   const limit = req.query.limit || 1000;
+  const type = req.query.type || "";
   try {
-    const users = await UserMessage.find({})
-      .limit(limit)
-      .skip(limit * page)
-      .select("-__v");
+    const users = type
+      ? await UserMessage.find({ type })
+      : await UserMessage.find({})
+          .limit(limit)
+          .skip(limit * page)
+          .select("-__v");
     const total = await UserMessage.count({});
     return res.status(200).send({
       status: "success",

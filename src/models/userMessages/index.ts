@@ -8,6 +8,7 @@ const UserMessageSchema = new Schema<IMessages>(
     phoneNumber: { type: String, trim: true },
     subject: { type: String, trim: true },
     message: { type: String, trim: true },
+    type: { type: String, trim: true },
   },
   { timestamps: true }
 );

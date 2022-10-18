@@ -69,4 +69,5 @@ export interface IMessages {
   phoneNumber: string;
   subject: string;
   message: string;
+  type: string;
 }
