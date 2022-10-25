@@ -78,27 +78,23 @@ export const addUsersFromExcel = async (req: Request, res: Response) => {
     password: el?.email,
     role: "user",
   }));
-  let fileError = {};
+
   try {
     const users = await User.insertMany(newData, { ordered: false });
-
     res.send({
       status: "bulk addition success",
       data: users,
-      fileError,
     });
   } catch (err) {
     return res.status(400).send({
       status: "error",
       totalDataInserted: err.result.nInserted,
       insertedDatas: err.insertedDocs,
-      fileError,
     });
   }
 };
 
 // 4) update single user -->
-
 export const updateSingleUser = async (req: ReqPostUser, res: Response) => {
   const image = req.file?.path;
   const user = req.body?._id;
@@ -149,12 +145,16 @@ export const deleteSingleUser = async (req: Request, res: Response) => {
   const id = req.params.id;
   try {
     let deletedUser = await User.findByIdAndDelete(id).select("-__V -password");
-    if (deletedUser) {
-      return res.status(200).send({
-        status: "success",
-        user: deletedUser,
+    if (!deletedUser) {
+      return res.status(400).send({
+        status: "failed",
+        message: "no user by that id",
       });
     }
+    return res.status(200).send({
+      status: "success",
+      user: deletedUser,
+    });
   } catch (error) {
     return res.status(400).send({
       status: "failed",
@@ -163,14 +163,12 @@ export const deleteSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+// 7) update user password
 export const updatePasswordController = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
     const hashedPwd = await bcrypt.hash(password, 12);
-    const user = await User.findOneAndUpdate(
-      { email },
-      { password: hashedPwd }
-    );
+    await User.findOneAndUpdate({ email }, { password: hashedPwd });
     return res.status(200).send({
       status: "success",
       message:

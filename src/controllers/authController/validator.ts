@@ -3,8 +3,6 @@ import Joi from "joi";
 
 import validationFields from "./validatorRules";
 
-type validationResponse = {};
-
 /*
   @params:
    1 -> fields<array>

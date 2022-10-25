@@ -12,6 +12,14 @@ import PostRouter from "app/routes/post";
 import LikeRouter from "app/routes/like";
 import CommentRouter from "app/routes/comment";
 import AuthRouter from "app/routes/auth";
+import NoticeRouter from "app/routes/notice";
+import UtilsRouter from "app/routes/utils";
+import {
+  ClientToServerEvents,
+  InterServerEvents,
+  ServerToClientEvents,
+  SocketData,
+} from "app/types/socket";
 
 // express instantiation
 const app = Express();
@@ -31,9 +39,6 @@ import "app/config/passport";
 import "app/config/database";
 
 import "app/config/multer";
-import { Types } from "mongoose";
-import NoticeRouter from "app/routes/notice";
-import UtilsRouter from "app/routes/utils";
 
 // -------------------------------
 
@@ -54,7 +59,7 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-// Swagger definition
+// Swagger definition -----------------------
 const swaggerDefinition = {
   info: {
     title: "REST API for Knowledge Seekers", // Title of the documentation
@@ -86,47 +91,14 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     message: err.message,
   });
 });
+// ------------------------- end of swagger and error logging
 
 // Launching the app
 const server = app.listen(process.env.PORT || 5000, () => {
   console.log("listening on port 5000");
 });
-// type definition for message model
-interface typeMessage {
-  sender: Types.ObjectId;
-  message: string;
-  chat: Types.ObjectId;
-}
 
-// https://ks-api.vercel.app/
-// types for socket io
-interface ServerToClientEvents {
-  noArg: () => void;
-  connected: (message: string) => void;
-  basicEmit: (a: number, b: string, c: Buffer) => void;
-  withAck: (d: string, callback: (e: number) => void) => void;
-  receiveComment: (comment: string) => void;
-  receiveReply: (comment: string) => void;
-}
-
-interface ClientToServerEvents {
-  addComment: (comment: string, room: string) => void;
-  addReply: (reply: string, room: string) => void;
-  joinPost: (id: string) => void;
-  newMessage: (message: typeMessage, room: string) => void;
-}
-
-interface InterServerEvents {
-  ping: () => void;
-}
-
-interface SocketData {
-  name: string;
-  age: number;
-  id: string;
-}
-
-// creating socket io server
+// creating socket io server   --- WEB SOCKETS
 const io = new Server<
   ClientToServerEvents,
   ServerToClientEvents,
@@ -156,14 +128,4 @@ io.on("connection", (socket) => {
     console.log("add reply", reply, room);
     socket.to(room).emit("receiveReply", reply);
   });
-
-  // socket.to("627a15248b49306a00f48a67").emit("connected", "hi there");
-  // socket.on("setup", (id) => {
-  //   socket.join(id);
-  //   console.log(id);
-  // });
-
-  // socket.on("newMessage", (message, room) => {
-  //   socket.broadcast.to(room).emit("receiveMessage", message);
-  // });
 });
