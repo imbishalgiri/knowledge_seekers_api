@@ -43,7 +43,7 @@ import "app/config/multer";
 // -------------------------------
 
 // ---------> (ROUTES)
-app.use("/api/v1/users", UserRouter);
+app.use("/api/v1/users", UserRouter); // refactored
 app.use("/api/v1/posts", PostRouter);
 app.use("/api/v1/likes", LikeRouter);
 app.use("/api/v1/comments", CommentRouter);

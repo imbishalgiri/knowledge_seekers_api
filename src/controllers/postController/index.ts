@@ -7,18 +7,6 @@ import { IPosts, IUser } from "app/types/modelTypes";
 import { TypedRequestBody } from "app/types/typeUtils";
 import Like from "app/models/like";
 import Comment from "app/models/comment";
-// import ContentBasedRecommender from "content-based-recommender";
-
-// const recommender = new ContentBasedRecommender({
-//   minScore: 0.1,
-//   maxSimilarDocuments: 100,
-// });
-
-// interface Iquery {
-//   limit: number;
-//   page: number;
-//   title: string;
-// }
 
 export interface ReqPostUser extends Request {
   description: string;
